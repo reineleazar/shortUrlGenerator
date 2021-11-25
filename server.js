@@ -6,31 +6,25 @@ if(process.env.NODE_ENV !== 'production')
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
-// const initializePassport = require('./passport-config')
+const initializePassport = require('./passport-config')
 const bcrypt = require('bcrypt')
 const flash = require('express-flash')
 const session = require('express-session')
-const LocalStrategy = require('passport-local').Strategy
+// const LocalStrategy = require('passport-local').Strategy
 const passport  = require('passport')
 const methodOverride = require('method-override')
 const shortUrl = require('./models/shortUrl')
-
-
+const mongoUtil = require('./mongo-util')
 
 mongoose.connect('mongodb://localhost/urlDbase', { //urlDbase = name of database
     useNewUrlParser: true
 }) 
 
+initializePassport(passport,
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id)
+)
 
-
-// initializePassport(passport,
-//     email => users.find(user => user.email === email),
-//     id => users.find(user => user.id === id)
-// )
-
-//initializePassport(passport, email => shortUrl.findOne({username: "user1"}))
-
-    
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({extended: false}))
 app.use(flash())
@@ -42,6 +36,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use( express.static( "public" ))
 
 
 app.get('/index',checkAuthenticated, async (req,res)=>{
@@ -157,6 +152,7 @@ app.post('/update/:id',checkAuthenticated, async (req, res) => { //add url detai
             await shortUrl.updateOne({_id: req.user._id, "shortUrl.title": update.title, "shortUrl.name": update.name, "shortUrl.fullLink": update.fullLink },{
                 $set:{"shortUrl.$.title": req.body.title, "shortUrl.$.name": req.body.urlName, "shortUrl.$.fullLink": req.body.fullLink
                 }})
+                
 
                 res.redirect('/')
         }
@@ -199,10 +195,7 @@ app.get('/:inputAddress', async (req, res) => { //redirect the shortlink to the 
     if(address != null)
       {
         try{
-            
-            const link = address.shortUrl.find(({name}) => name === req.params.inputAddress)
-            console.log(link.fullLink)
-    
+            const link = address.shortUrl.find(({name}) => name === req.params.inputAddress)    
                 if (link) {
                     return res.redirect(link.fullLink)
                     
@@ -221,10 +214,6 @@ app.get('/:inputAddress', async (req, res) => { //redirect the shortlink to the 
     
     })
 
-//     //The 404 Route (ALWAYS Keep this as the last route)
-// app.get('*', function(req, res){
-//     res.send('what???', 404);
-//   });
   
 function checkAuthenticated(req,res,next){
     if(req.isAuthenticated())
@@ -241,35 +230,5 @@ function checkNotAuthenticated(req,res,next){
     }
     next()
 }
-
- passport.use(new LocalStrategy({usernameField: 'email'}, async(email,password,done)=>{
-        const user = await shortUrl.findOne({email:email})
-        if(!user)
-        {
-            return done(null,false,{message: 'no user with that email'})
-        }
-        else
-        { 
-            try{
-       
-                if(await bcrypt.compare(password,user.password)){
-                     return done(null,user)
-                 }else{
-                     return done(null,false,{message:'Password Incorrect'})
-                 }}
-                 catch(err){
-                     return done(err)
-                 }
-        }
-    
-}))
-
-
-passport.serializeUser((user,done)=> done(null,user))
-passport.deserializeUser(function(_id, done){
-shortUrl.findById(_id, function(err,user){
-    done(err,user)
-})
-})
 
 app.listen(3000)
