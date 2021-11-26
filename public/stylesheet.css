@@ -1,0 +1,27 @@
+/* login.js */
+.center {
+    margin: 15% auto auto auto;
+    width: 40%;
+    }
+.centerbutton{
+    width:auto;
+}
+img{
+  position: fixed;
+  width:200px;
+  height: 200px;
+  top:0%;
+  left:39%;
+  margin-top: -75; /* Negative half of height. */
+  margin-left: -75; /* Negative half of width. */
+}
+
+/* index.js */
+.centerbox{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+  }
+.centerbutton{
+    margin-left:45%
+}
