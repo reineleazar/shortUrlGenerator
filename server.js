@@ -14,7 +14,6 @@ const session = require('express-session')
 const passport  = require('passport')
 const methodOverride = require('method-override')
 const shortUrl = require('./models/shortUrl')
-const mongoUtil = require('./mongo-util')
 
 mongoose.connect('mongodb://localhost/urlDbase', { //urlDbase = name of database
     useNewUrlParser: true
@@ -36,7 +35,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
-app.use( express.static( "public" ))
+app.use('/public/',express.static("public"))
 
 
 app.get('/index',checkAuthenticated, async (req,res)=>{
