@@ -1,20 +1,27 @@
 /* login.js */
 .center {
-    margin: 15% auto auto auto;
+    /* margin: 15% auto auto auto; */
     width: 40%;
+    order: 2;
     }
 .centerbutton{
     width:auto;
 }
 img{
-  position: fixed;
+  position: relative;
   width:200px;
   height: 200px;
   top:0%;
-  left:39%;
+  left: 39%;
   margin-top: -75; /* Negative half of height. */
   margin-left: -75; /* Negative half of width. */
 }
+.logo{
+  display: flex;
+  flex-direction: column;
+  order: 1;
+}
+
 
 /* index.js */
 .centerbox{
