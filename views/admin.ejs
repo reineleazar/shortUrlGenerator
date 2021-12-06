@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<link href="/public/stylesheet.css" rel="stylesheet">
+</head>
+<script>
+    function copyLink(x) {
+  navigator.clipboard.writeText(x);
+
+  /* Alert the copied text */
+  alert("Copied the text: " + x);
+  }
+</script>
+
+<body>   
+    <% shortLink.forEach((user)=>{ %>
+    <h3>  <%= user.username %></h3>    
+    <table class="table">
+        <thead>
+            <th scope="col">Title</th>
+            <th scope="col">Name</th>
+            <th scope="col">Short URL</th>
+            <th scope="col">Full URL</th>
+            <th scope="col"><%= user.name%></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            <% user.shortUrl.forEach((link,index) => { %>
+                <tr>
+                    <td><%= link.title %></td>   
+                    <td><%= link.name %></td>   
+                    <td id="shortLink">localhost:3000/<%= link.name %></td>  
+                    <td><%= link.fullLink%></td>   
+                             
+                </tr>
+            <% })%>
+           
+        </tbody>
+        </table>
+    <% }) %>
+</body>
+</html>
+
+<form action="/logout?_method=DELETE" method="POST">
+    <button type="submit">Log Out</button>
+  </form>
