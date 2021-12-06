@@ -40,8 +40,20 @@ app.use('/public/',express.static("public"))
 
 app.get('/index',checkAuthenticated, async (req,res)=>{
 //find the docu using the id of authenticated user
-const urlDbase= await shortUrl.findOne({_id: req.user._id})
-res.render('index.ejs', { shortLink: urlDbase, title:true, name:true, link:true, nameholder:req.body.urlName})
+
+if(req.user.admin){
+    const urlDbase= await shortUrl.find({})
+    res.render('admin.ejs', { shortLink: urlDbase })
+    
+}
+else{
+    const urlDbase= await shortUrl.findOne({_id: req.user._id})
+    res.render('index.ejs', { shortLink: urlDbase, title:true, name:true, link:true, nameholder:req.body.urlName})
+    
+}
+
+
+
 })
 app.get('/',checkNotAuthenticated, (req,res)=>{
 res.render('login.ejs')
