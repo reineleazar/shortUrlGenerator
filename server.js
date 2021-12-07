@@ -16,7 +16,7 @@ const passport  = require('passport')
 const methodOverride = require('method-override')
 const shortUrl = require('./models/shortUrl')
 
-mongoose.connect('mongodb://localhost/urlDbase', { //urlDbase = name of database
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/urlDbase', { //urlDbase = name of database
     useNewUrlParser: true
 }) 
 
@@ -248,4 +248,4 @@ function checkNotAuthenticated(req,res,next){
     next()
 }
 
-app.listen(3000)
+app.listen(process.env.PORT || 3000)
