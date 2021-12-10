@@ -9,6 +9,25 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 <link href="/public/stylesheet.css" rel="stylesheet">
 </head>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <a class="navbar-brand">Edit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+          </ul>
+        </div>
+
+        <form action="/logout?_method=DELETE" method="POST" class="form-inline my-2 my-lg-0">
+        <button type="submit" class="btn btn-outline-danger">Log Out</button>
+        </form>
+
+      </nav> 
+</header>
 <body>
     <div class="container-fluid centerbox">
         <form  class="align-self-center"action="/update/<%= index %>" method="POST"> <!--action should be the database js file -->
