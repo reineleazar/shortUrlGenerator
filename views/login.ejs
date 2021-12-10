@@ -9,25 +9,47 @@
       <link href="/public/stylesheet.css" rel="stylesheet">
   </head>
   <body>
-    <div class="logo"><img src="/public/deped-logo.png" /></div>
       <div class="container-fluid center">
+        <img src="/public/deped-logo.png" />
+
         <form action="/login" class="align-self-center" method="POST">
-          <div class="mb-3">
+           <div class="mb-3"> <!-- username textbox -->
             <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label><!--username label here-->
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="email" name="email"><!--usrname input heree-->
+              <!-- <input type="text" class="form-control" id="email" name="email">usrname input heree -->
+              <% if((messages.error) == "email") {%>
+              <input type="text" class="form-control is-invalid" id="email" name="email"><!--usrname input heree-->
+              <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Invalid Email
+              </div>
+              <% } else { %>  
+                <input type="text" class="form-control" id="email" name="email"><!--usrname input heree-->
+                <% } %> 
             </div>
-          </div>
-          <div class="mb-3">
+          </div> 
+         
+          <div class="mb-3"> <!-- passwor textbox -->
             <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label><!--password label here-->
             <div class="col-sm-10">
-              <input type="password" class="form-control" id="password" name="password"><!--password input here-->
+              <!-- <input type="password" class="form-control" id="password" name="password">password input here -->
+              <% if((messages.error) == "password") {%>
+              <input type="password" class="form-control is-invalid" id="password" name="password"><!--password input here-->
+              <div id="validationServerUsernameFeedback" class="invalid-feedback">
+               Password Incorrect
+              </div> 
+              <% } else if ((messages.error) == 'Missing credentials') { %>
+                <input type="password" class="form-control is-invalid" id="password" name="password">
+                <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                  Missing credentials
+                 </div>  
+                 
+              <% } else{ %>  
+                <input type="password" class="form-control" id="password" name="password"><!--password input here-->
+                <% } %> 
             </div>
           </div>
-          <% if (messages.error) { %>
-            <%= messages.error %>
-          <% } %>
-      
+         
+         
           <button type="submit" class="btn btn-primary col-sm-10">Sign in</button>
       </form>
      
