@@ -66,22 +66,28 @@ res.render('login.ejs')
 })
 
 app.get('/register',checkNotAuthenticated, (req,res)=>{
-res.render('register.ejs',{message:true})
+res.render('register.ejs',{username:true,email:true,password:true,emailcheck:req.body.email})
 })
 
 
 
 app.post('/register',checkNotAuthenticated, async (req,res)=>{
     const user = await shortUrl.findOne({email: req.body.email})
-    console.log(user)
-    if(user)
+    const bodycheck1 = req.body.username  == ""
+    const bodycheck2 = req.body.email  == ""
+    const bodycheck3 = req.body.password  == ""
+   
+    if(bodycheck1 || bodycheck2 || bodycheck3){
+        res.render('register.ejs', {username:!bodycheck1,email:!bodycheck2,password:!bodycheck3,emailcheck:req.body.email})
+    }   
+    else if(user)
     {
-        console.log('Email already taken')
-        res.render('register.ejs', {message: false })
+        //email already taken
+        res.render('register.ejs', {username:true,email:false,password:true,emailcheck:req.body.email})
     }
     else
     {
-try{ 
+        try{ 
         const hashedPassword = await bcrypt.hash(req.body.password,10)
         await shortUrl.create({
             username: req.body.username,
