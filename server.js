@@ -11,7 +11,6 @@ const bcrypt = require('bcrypt')
 const flash = require('express-flash')
 //const session = require('express-session')
 const session = require('cookie-session')
-// const LocalStrategy = require('passport-local').Strategy
 const passport  = require('passport')
 const methodOverride = require('method-override')
 const shortUrl = require('./models/shortUrl')
@@ -31,6 +30,7 @@ app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
+    keys: ['key1', 'key2'],
     saveUninitialized: false,  
     proxy : true, // add this when behind a reverse proxy, if you need secure cookies
     cookie : {
@@ -46,7 +46,6 @@ app.use('/public/',express.static("public"))
 
 app.get('/index',checkAuthenticated, async (req,res)=>{
 //find the docu using the id of authenticated user
-
 if(req.user.admin){
     const urlDbase= await shortUrl.find({})
     res.render('admin.ejs', { shortLink: urlDbase })
