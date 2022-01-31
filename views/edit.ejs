@@ -11,23 +11,17 @@
 <link rel="icon" href="/public/deped-logo.png" type="image/x-icon" />
 </head>
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-        <a class="navbar-brand">Edit</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-          </ul>
-        </div>
-
-        <form action="/logout?_method=DELETE" method="POST" class="form-inline my-2 my-lg-0">
-        <button type="submit" class="btn btn-outline-danger">Log Out</button>
-        </form>
-
-      </nav> 
+    <section>
+        <nav class="navbar navbar-expand navbar-light">
+        <div class="container-fluid">
+            <img src="/public/deped-logo.png" />
+          </div>
+          
+          
+        <form action="/logout?_method=DELETE" method="POST" class="logout">
+            <button type="submit" class="btn btn-primary btn-sm">Log&nbspOut</button>
+        </nav>
+      </section>
 </header>
 <body>
     <div class="container-fluid centerbox">

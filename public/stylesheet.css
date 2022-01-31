@@ -5,14 +5,24 @@
   margin-top: 5%; 
    
 }
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
 .centerbutton{
     width:auto;
+}
+.logout{
+  margin-right: 2rem;
+  margin: 0px 32px 0px 0px;
+}
+a{
+  margin-right: 2rem;
 }
 img{
   position: relative;
   width:4rem;
   height: 4rem;
-  margin-top: -75; /* Negative half of height. */
   margin-left: 2rem; /* Negative half of width. */
 }
 .logo{
