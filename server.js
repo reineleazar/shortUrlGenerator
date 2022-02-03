@@ -31,10 +31,10 @@ app.use(session({
     resave: false,
     keys: ['key1', 'key2'],
     saveUninitialized: false,  
-    proxy : true, // add this when behind a reverse proxy, if you need secure cookies
+    proxy : true,
     cookie : {
         secure : true,
-        maxAge: 5184000000 // 2 months
+        maxAge: 5184000000 
     }  
 }))
 app.use(passport.initialize())
@@ -71,13 +71,10 @@ res.render('register.ejs',{username:true,email:true,password:true,emailcheck:req
 
 app.post('/register',checkNotAuthenticated, async (req,res)=>{
     const user = await shortUrl.findOne({email: req.body.email})
-    const bodycheck1 = req.body.username  == ""
-    const bodycheck2 = req.body.email  == ""
-    const bodycheck3 = req.body.password  == ""
-   
-    if(bodycheck1 || bodycheck2 || bodycheck3){
-        res.render('register.ejs', {username:!bodycheck1,email:!bodycheck2,password:!bodycheck3,emailcheck:req.body.email})
-    }   
+    
+    if(bodycheck(req.body.username) || bodycheck(req.body.email) || bodycheck(req.body.password)){
+        res.render('register.ejs', {username:!bodycheck(req.body.username),email:!bodycheck(req.body.email),password:!bodycheck(req.body.password),emailcheck:req.body.email})
+    }        
     else if(user)
     {
         //email already taken
@@ -106,12 +103,9 @@ app.post('/register',checkNotAuthenticated, async (req,res)=>{
 app.post('/create',checkAuthenticated,async (req,res)=>{
     const nameCheck = await shortUrl.findOne({shortUrl:{$elemMatch:{name: req.body.urlName}}})
     const urlDbase= await shortUrl.findOne({_id: req.user._id})
-    const bodycheck1 = req.body.title  == ""
-    const bodycheck2 = req.body.urlName  == ""
-    const bodycheck3 = req.body.fullLink  == ""
-    
-    if(bodycheck1 || bodycheck2 || bodycheck3){
-        res.render('index.ejs', {shortLink: urlDbase, title:!bodycheck1,name:!bodycheck2,link:!bodycheck3, nameholder:req.body.urlName})
+   
+    if(bodycheck(req.body.title) || bodycheck(req.body.urlName) || bodycheck(req.body.fullLink)){
+        res.render('index.ejs', {shortLink: urlDbase, title:!bodycheck(req.body.title),name:!bodycheck(req.body.urlName),link:!bodycheck(req.body.fullLink), nameholder:req.body.urlName})
     }    
     else if(nameCheck)
     {
@@ -158,13 +152,10 @@ app.get('/edit/:index',checkAuthenticated,  async (req, res) => {
 app.post('/update/:id',checkAuthenticated, async (req, res) => { //add url details in database
     const update = req.user.shortUrl[req.params.id]
     const nameCheck = await shortUrl.findOne({shortUrl:{$elemMatch:{name: req.body.urlName}}})
-    const bodycheck1 = req.body.title  == ""
-    const bodycheck2 = req.body.urlName  == ""
-    const bodycheck3 = req.body.fullLink  == ""
     
-    if(bodycheck1 || bodycheck2 || bodycheck3){
+    if(bodycheck(req.body.title) || bodycheck(req.body.urlName) || bodycheck(req.body.fullLink)){
 
-        res.render('edit.ejs', {urlDbase: update, index: req.params.id, title:!bodycheck1,name:!bodycheck2,link:!bodycheck3, error:req.body.urlName })
+        res.render('edit.ejs', {urlDbase: update, index: req.params.id, title:!bodycheck(req.body.title),name:!bodycheck(req.body.urlName),link:!bodycheck(req.body.fullLink), error:req.body.urlName })
     }
     else if(nameCheck)
     {
@@ -175,7 +166,7 @@ app.post('/update/:id',checkAuthenticated, async (req, res) => { //add url detai
                 }})
                 
 
-                res.redirect('/')
+                res.redirect('/index')
         }
         else
         {
@@ -190,7 +181,7 @@ app.post('/update/:id',checkAuthenticated, async (req, res) => { //add url detai
                 $set:{"shortUrl.$.title": req.body.title, "shortUrl.$.name": req.body.urlName, "shortUrl.$.fullLink": req.body.fullLink
                 }})
                
-                res.redirect('/')
+                res.redirect('/index')
             }      
         catch(err){
              console.log(err)
@@ -250,6 +241,11 @@ function checkNotAuthenticated(req,res,next){
         return res.redirect('/index')
     }
     next()
+}
+
+function bodycheck(s)
+{
+    return s == ""
 }
 
 app.listen(process.env.PORT || 3000)
